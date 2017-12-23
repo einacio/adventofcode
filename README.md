@@ -1,1 +1,1 @@
-http://adventofcode.com/2017
+my solutions to http://adventofcode.com/2017
