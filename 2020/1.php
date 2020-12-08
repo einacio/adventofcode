@@ -8,7 +8,7 @@ if ($argc == 1) {
     exit;
 }
 
-$values = file($argv[2], FILE_IGNORE_NEW_LINES + FILE_SKIP_EMPTY_LINES); // load file into array
+$values = file($argv[1], FILE_IGNORE_NEW_LINES + FILE_SKIP_EMPTY_LINES); // load file into array
 $values = array_flip($values); // convert values into indices, that give us easier/faster access and dedup
 
 // polyfill pre 7.3
