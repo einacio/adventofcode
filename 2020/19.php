@@ -11,10 +11,10 @@ while($rule = $values[$i++]){
 }
 
 $messages= array_filter(array_slice($values, $i));
-
+$parsedRules = [];
 
 function parseRule($i){
-    static $parsedRules = [];
+    global $parsedRules;
     global $rules;
     if(!isset($parsedRules[$i])){
         if($rules[$i][0] == '"'){
@@ -46,3 +46,21 @@ $expr = '/^'.parseRule(0).'$/';
 $count = count(array_filter($messages, function($v)use($expr){return preg_match($expr, $v);}));
 
 echo "1: $count\n";
+
+
+$parsedRules = [];
+$parsedRules[8] = '('.parseRule(42).')+';
+
+//manual recursion 5 times, because it's easier than rewriting to not use regex
+$rule11 = '(';
+foreach(range(1,5) as $i){
+    $rule11.= parseRule(42).'{'.$i.'}'.parseRule(31).'{'.$i.'}|';
+}
+
+$parsedRules[11] = rtrim($rule11, '|').')';
+
+$expr = '/^'.parseRule(0).'$/';
+
+$count = count(array_filter($messages, function($v)use($expr){return preg_match($expr, $v);}));
+
+echo "2: $count\n";
