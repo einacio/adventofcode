@@ -190,33 +190,25 @@ $linebreak = strlen($renderedImage[0]) - 20;
 
 $pattern = '/#..{'.$linebreak.'}#.{4}##.{4}##.{4}###.{'.$linebreak.'}.#..#..#..#..#..#/';
 
-//$renderedImage = array_reverse($renderedImage);
-//$renderedImage = rotateImage($renderedImage);
-//$renderedImage = rotateImage($renderedImage);
-//$renderedImage = rotateImage($renderedImage);
-echo implode("\n", $renderedImage);
-$test = implode('',$renderedImage);
-var_dump(preg_match_all($pattern, $test));
 $j = 5;
 $counts=[];
 while($j--){
     $i = 4;
     while($i--) {
         $test = implode('', $renderedImage);
-        var_dump(count_chars($test)[ord('#')]);
-        if ($count = preg_match_all($pattern, $test)) {
+        if (preg_match($pattern, $test, $matches, PREG_OFFSET_CAPTURE)) {
             break 2;
         }
         $renderedImage = rotateImage($renderedImage);
     }
     $renderedImage = array_reverse($renderedImage);
 }
-$count = count_chars($test)[ord('#')] - ($count * 15);
 
-//echo implode("\n", $renderedImage);
-$test = implode('',$renderedImage);
-var_dump(preg_match_all($pattern, $test));
-var_dump($pattern);
+$count = 1;
+$offset = $matches[0][1]+1;
+while($res = preg_match($pattern, $test, $matches, PREG_OFFSET_CAPTURE, $offset)){
+    $count++;
+    $offset =$matches[0][1]+1;
+}
+$count = count_chars($test)[ord('#')] - 15*$count;
 echo "2: $count\n";
-
-echo count($pieces).' '.count($renderedImage).' '.strlen($renderedImage[0]);
