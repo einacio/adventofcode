@@ -55,3 +55,90 @@ foreach ($tiles as $row){
 }
 
 echo "1: $sum\n";
+
+
+function fillAround(&$map, $x, $y){
+    if(!isset($map[$x+1])){
+        $map[$x+1] = [];
+    }
+    if(!isset($map[$x+2])){
+        $map[$x+2] = [];
+    }
+    if(!isset($map[$x-1])){
+        $map[$x-1] = [];
+    }
+    if(!isset($map[$x-2])){
+        $map[$x-2] = [];
+    }
+
+    if(!isset($map[$x+1][$y+1])){
+        $map[$x+1][$y+1] = 0;
+    }
+    if(!isset($map[$x-1][$y+1])){
+        $map[$x-1][$y+1] = 0;
+    }
+
+    if(!isset($map[$x+1][$y-1])){
+        $map[$x+1][$y-1] = 0;
+    }
+    if(!isset($map[$x-1][$y-1])){
+        $map[$x-1][$y-1] = 0;
+    }
+
+    if(!isset($map[$x+2][$y])){
+        $map[$x+2][$y] = 0;
+    }
+    if(!isset($map[$x-2][$y])){
+        $map[$x-2][$y] = 0;
+    }
+
+    // fill place for marks map
+    if(!isset($map[$x][$y])){
+        $map[$x][$y] = 0;
+    }
+}
+
+function markAround(&$map, $x, $y){
+    fillAround($map, $x, $y);
+    $map[$x+1][$y+1]++;
+    $map[$x-1][$y+1]++;
+    $map[$x+1][$y-1]++;
+    $map[$x-1][$y-1]++;
+    $map[$x+2][$y]++;
+    $map[$x-2][$y]++;
+}
+
+
+$count = 100;
+while($count--) {
+    $marks = [];
+    foreach ($tiles as $x => $row) {
+        foreach($row as $y => $val){
+            fillAround($tiles, $x, $y);
+            if($val){
+                markAround($marks, $x, $y);
+            }
+        }
+    }
+
+    foreach($marks as $x => $row){
+        foreach($row as $y => $val){
+            if(!$val || $val > 2){
+                if($tiles[$x][$y]){
+                    $tiles[$x][$y] = 0;
+                }
+            }elseif($val == 2){
+                if(!$tiles[$x][$y]){
+                    $tiles[$x][$y] = 1;
+                }
+            }
+        }
+    }
+}
+
+$sum = 0;
+foreach ($tiles as $row){
+    $sum += array_sum($row);
+}
+
+echo "2: $sum\n";
